@@ -1,0 +1,141 @@
+﻿@using PPPKZadatak03.ViewModels
+@model VMMovie
+
+@{
+    ViewBag.Title = "Edit Movie";
+}
+
+<div class="container mt-5">
+    <h2>@ViewBag.Title</h2>
+
+    <form asp-action="Edit" method="post">
+        <input type="hidden" name="Id" value="@Model.MovieId">
+
+        <div class="form-group">
+            <label for="Title">Title</label>
+            <input type="text" class="form-control" id="Title" name="Title" value="@Model.Title">
+        </div>
+
+        <div class="form-group">
+            <label for="ReleaseDate">Release Date</label>
+            <input type="date" class="form-control" id="ReleaseDate" name="ReleaseDate"
+                   value="@Model.ReleaseDate?.ToString("yyyy-MM-dd")">
+        </div>
+
+
+        <div class="form-group">
+            <label for="Genre">Genre</label>
+            <input type="text" class="form-control" id="Genre" name="Genre" value="@Model.Genre">
+        </div>
+
+        <!-- Actors Selection -->
+        <div class="form-group">
+            <label for="AvailableActors">Available Actors</label>
+            <select multiple class="form-control" id="AvailableActors" name="AvailableActors">
+                @foreach (var actor in ViewBag.AvailableActors)
+                {
+                    <option value="@actor.Value">@actor.Text</option>
+                }
+            </select>           
+            <br>
+            <button type="button" class="btn btn-info" onclick="moveToSelected('AvailableActors', 'SelectedActorIds')">Add</button>
+            <button type="button" class="btn btn-warning" onclick="moveToSelected('SelectedActorIds', 'AvailableActors')">Remove</button>
+            <br>
+            <label for="SelectedActorIds">Selected Actors</label>
+            <select multiple class="form-control" id="SelectedActorIds" name="SelectedActorIds">
+                @foreach (var actor in ViewBag.SelectedActors)
+                {
+                    <option value="@actor.Value" selected>@actor.Text</option>
+                }
+            </select>
+        </div>
+
+        <!-- Directors Selection -->
+        <div class="form-group">
+            <label for="AvailableDirectors">Available Directors</label>
+            <select multiple class="form-control" id="AvailableDirectors" name="AvailableDirectors">
+                @foreach (var director in ViewBag.AvailableDirectors)
+                {
+                    <option value="@director.Value">@director.Text</option>
+                }
+            </select>
+            <br>
+            <button type="button" class="btn btn-info" onclick="moveToSelected('AvailableDirectors', 'SelectedDirectorIds')">Add</button>
+            <button type="button" class="btn btn-warning" onclick="moveToSelected('SelectedDirectorIds', 'AvailableDirectors')">Remove</button>
+            <br>
+            <label for="SelectedDirectorIds">Selected Directors</label>
+            <select multiple class="form-control" id="SelectedDirectorIds" name="SelectedDirectorIds">
+                @foreach (var director in ViewBag.SelectedDirectors)
+                {
+                    <option value="@director.Value" selected>@director.Text</option>
+                }
+            </select>
+        </div>
+
+        <!-- Posters Selection -->
+        <div class="form-group">
+            <label>Available Posters</label>
+            <div class="row">
+                @{
+                    var availablePosters = (List<SelectListItem>)ViewBag.AvailablePosters;
+                    var selectedPosterIds = ((List<SelectListItem>)ViewBag.SelectedPosters).Select(p => p.Value).ToList();
+                }
+                @foreach (var poster in availablePosters)
+                {
+                    <div class="col-md-3 text-center">
+                        <img src="@poster.Text" alt="Poster" class="img-thumbnail" />
+                        <div class="mt-2">
+                            <input type="checkbox" name="SelectedPosterLinks" value="@poster.Value"
+                               @(selectedPosterIds.Contains(poster.Value) ? "checked" : "") />
+                            Select
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+    <br>
+    <br>
+    <br>
+</div>
+
+@section Scripts {
+    <script>
+        function moveToSelected(sourceId, targetId) {
+            var sourceSelect = document.getElementById(sourceId);
+            var targetSelect = document.getElementById(targetId);
+
+            for (var i = 0; i < sourceSelect.options.length; i++) {
+                if (sourceSelect.options[i].selected) {
+                    var option = sourceSelect.options[i];
+
+                    // Remove option from source
+                    sourceSelect.remove(i--);
+
+                    // Add option to target only if it doesn't exist in target
+                    if (!itemExistsInList(targetSelect, option.value)) {
+                        targetSelect.add(option);
+                    }
+
+                    // Ensure the moved item is selected in the target list
+                    option.selected = true;
+                }
+            }
+        }
+
+
+
+        function itemExistsInList(list, value) {
+            for (var i = 0; i < list.options.length; i++) {
+                if (list.options[i].value === value) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+    </script>
+}

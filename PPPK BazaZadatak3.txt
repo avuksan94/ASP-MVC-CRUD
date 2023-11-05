@@ -1,0 +1,72 @@
+go
+-- Actor Table
+CREATE TABLE Actor (
+    ActorId INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(255) NOT NULL
+);
+
+-- Director Table
+CREATE TABLE Director (
+    DirectorId INT PRIMARY KEY IDENTITY(1,1),
+    Name NVARCHAR(255) NOT NULL
+);
+
+-- Movie Table 
+CREATE TABLE Movie (
+    MovieId INT PRIMARY KEY IDENTITY(1,1),
+    Title NVARCHAR(255) NOT NULL,
+    ReleaseDate DATE,
+    Genre NVARCHAR(50)
+);
+
+-- ActorMovie Relationship Table (Many-to-Many Relationship)
+CREATE TABLE ActorMovie (
+    ActorId INT,
+    MovieId INT,
+    -- Primary Key Constraint
+    PRIMARY KEY (ActorId, MovieId),
+    -- Foreign Key Relations
+    FOREIGN KEY (ActorId) REFERENCES Actor(ActorId),
+    FOREIGN KEY (MovieId) REFERENCES Movie(MovieId)
+);
+
+-- DirectorMovie Relationship Table
+CREATE TABLE DirectorMovie (
+    DirectorId INT,
+    MovieId INT,
+    -- Primary Key Constraint
+    PRIMARY KEY (DirectorId, MovieId),
+    -- Foreign Key Relations
+    FOREIGN KEY (DirectorId) REFERENCES Director(DirectorId),
+    FOREIGN KEY (MovieId) REFERENCES Movie(MovieId)
+);
+
+--Poster
+CREATE TABLE Poster (
+	PosterId INT PRIMARY KEY IDENTITY(1,1),
+    Content NVARCHAR(1024) NOT NULL
+)
+
+--MoviePoster (linking table)
+CREATE TABLE MoviePoster (
+    MovieId INT,
+    PosterId INT,
+    
+    PRIMARY KEY (MovieId, PosterId),
+    
+    FOREIGN KEY (MovieId) REFERENCES Movie(MovieId),
+    FOREIGN KEY (PosterId) REFERENCES Poster(PosterId)
+);
+
+
+
+
+********************************************************************8
+public class MoviePoster
+{
+    public int MoviePosterId { get; set; }
+    public byte[] ImageData { get; set; }
+    public string ImageMimeType { get; set; }
+    public int MovieId { get; set; }
+    public virtual Movie Movie { get; set; }
+}

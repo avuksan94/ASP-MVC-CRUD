@@ -1,0 +1,55 @@
+﻿@using PPPKZadatak03.ViewModels;
+
+@model IEnumerable<VMMovie>
+
+@{
+    ViewBag.Title = "List of Movies";
+}
+
+<div class="container mt-5">
+    <h2>@ViewBag.Title</h2>
+
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>Title</th>
+                <th>Release Date</th>
+                <th>Genre</th>
+                <th>Actors</th>
+                <th>Directors</th>
+                <th>Posters</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var movie in Model)
+            {
+                <tr>
+                    <td>@movie.Title</td>
+                    <td>@movie.ReleaseDate?.ToString("dd/MM/yyyy")</td>
+                    <td>@movie.Genre</td>
+                    <td>
+                        @string.Join(", ", movie.ActorNames)
+                    </td>
+                    <td>
+                        @string.Join(", ", movie.DirectorNames)
+                    </td>
+                    <td>
+                        @foreach (var link in movie.PosterLinks)
+                        {
+                            <a href="@link" target="_blank">View Poster</a>
+
+                            <br />
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "Movie", new { id = movie.MovieId })" class="btn btn-sm btn-primary">Edit</a>
+                        <a href="@Url.Action("Delete", "Movie", new { id = movie.MovieId })" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="@Url.Action("Create", "Movie")" class="btn btn-success">Add New Movie</a>
+</div>

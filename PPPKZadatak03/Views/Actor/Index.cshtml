@@ -1,0 +1,38 @@
+﻿@model IEnumerable<PPPKZadatak03.Models.Actor>
+
+@{
+    ViewData["Title"] = "Actors Index";
+}
+
+<div class="container mt-5">
+    <h2>@ViewData["Title"]</h2>
+
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">Create New Actor</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="thead-dark">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ActorId" class="btn btn-sm btn-primary">Edit</a>
+                            <a asp-action="Delete" asp-route-id="@item.ActorId" class="btn btn-sm btn-danger">Delete</a>
+                        </td>
+                    </tr>
+            }
+        </tbody>
+    </table>
+</div>

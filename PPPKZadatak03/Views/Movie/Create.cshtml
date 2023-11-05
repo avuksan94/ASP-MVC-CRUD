@@ -1,0 +1,68 @@
+﻿@using PPPKZadatak03.ViewModels
+@model VMMovie
+
+@{
+    ViewBag.Title = "Create Movie";
+}
+
+<div class="container mt-5">
+    <h2>@ViewBag.Title</h2>
+
+    <form asp-action="Create" method="post">
+        <div class="form-group">
+            <label for="Title">Title</label>
+            <input type="text" class="form-control" id="Title" name="Title" placeholder="Enter movie title">
+        </div>
+
+        <div class="form-group">
+            <label for="ReleaseDate">Release Date</label>
+            <input type="date" class="form-control" id="ReleaseDate" name="ReleaseDate">
+        </div>
+
+        <div class="form-group">
+            <label for="Genre">Genre</label>
+            <input type="text" class="form-control" id="Genre" name="Genre" placeholder="Enter genre">
+        </div>
+
+        <div class="form-group">
+            <label for="Actors">Select Actors</label>
+            <select multiple class="form-control" id="Actors" name="SelectedActorIds">
+                @foreach (var actor in ViewBag.Actors)
+                {
+                    <option value="@actor.Value">@actor.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="Directors">Select Directors</label>
+            <select multiple class="form-control" id="Directors" name="SelectedDirectorIds">
+                @foreach (var director in ViewBag.Directors)
+                {
+                    <option value="@director.Value">@director.Text</option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="Posters">Select Posters</label>
+            <div class="posters-selection">
+                @foreach (var poster in ViewBag.Posters)
+                {
+                    <div class="poster-item">
+                        <label>
+                            <input type="checkbox" name="SelectedPosterLinks" value="@poster.Value">
+                            <img src="@poster.Text" alt="Poster" width="100" /> <!-- Adjust width as needed -->
+                        </label>
+                    </div>
+                }
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <br>
+    <br>
+    <br>
+</div>
